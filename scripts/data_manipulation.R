@@ -1,8 +1,5 @@
 # ==================================== LAPOP ECUADOR DATA MANIPULATION ========================================================
 
-# Daniel Sánchez
-# USFQ Economics Undergraduate Thesis
-# June 2022
 # Script for the data manipulation of the LAPOP files for Ecuador.
 
 # ================================================= Preliminaries =============================================================
@@ -24,7 +21,7 @@ library(car) # for recode
 # I downloaded the databases for all available years until 2019 from the LAPOP website (these are the fully free)
 # http://datasets.americasbarometer.org/database/index.php?freeUser=true
 
-# These are the dta dataframes with no value labels for each year
+# These are the dta dataframes with no value labels
 
 df_2019<-read_dta('data/dta/ecu2019.dta')
 df_2016<-read_dta('data/dta/ecu2016.dta')
@@ -36,7 +33,6 @@ df_2006<-read_dta('data/dta/ecu2006.dta')
 df_2004<-read_dta('data/dta/ecu2004.dta')
 
 # These are csv dataframes, exported from Stata. These do have value labels, might be necessary for some variables
-# (I didn't know I could apply the value labels with the labelled package back then, sorry)
 
 dfc_2019<-read_csv('data/csv/df2019.csv', show_col_types = F)
 dfc_2016<-read_csv('data/csv/df2016.csv', show_col_types = F)
@@ -49,7 +45,7 @@ dfc_2004<-read_csv('data/csv/df2004.csv', show_col_types = F)
 
 # Below the full, merged dataframe as found in the LAPOP website, loaded as an R object from the other project
 
-load('data/rdata/LAPOP 2004-2019 Merged.Rdata') 
+load('data/rdata/LAPOP 2004-2019 Merged.Rdata')
 
 # This one I loaded into a separate script and then saved as an .RData file, because it was very heavy and GitHub wouldn't have it.
 
@@ -82,14 +78,14 @@ df$weight1500<- (df$wt * 1500)/(nrow(df_2019))
 # Create the political party label, with clear text values so that it is easier to track support across time
 
 df$party<-ifelse(df$vb11 == 913,  'PAIS',
-                 ifelse(df$vb11 == 901, 'CREO', 
+                 ifelse(df$vb11 == 901, 'CREO',
                         ifelse(df$vb11 == 903, 'PSC',
-                               ifelse(df$vb11 == 915, 'ID', 
+                               ifelse(df$vb11 == 915, 'ID',
                                       ifelse(df$vb11 == 907, 'PK', 'Others'))))) %>% as.factor
 
 # Variables for the exposure to corruption -------------------------------------------------------------------------------
 
-# Later I will need to be able to difference from different kinds of NAs for these variables, namely, difference from 
+# Later I will need to be able to difference from different kinds of NAs for these variables, namely, difference from
 # "Not applicable" of the usual "NA"
 
 # Thus, for every year I will replace these variables from their csv counterparts, which do have applied labels.
@@ -100,7 +96,7 @@ df$exc14<-dfc_2019$exc14 %>% as.factor()
 df$exc15<-dfc_2019$exc15 %>% as.factor()
 df$exc16<-dfc_2019$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df$corr_mun<-ifelse(df$exc11 == 'Yes', 1,
                     ifelse(df$exc11 == 'Not Applicable'| df$exc11 == 'No', 0, NA))
@@ -136,7 +132,7 @@ df_2016$weight1500<- (df_2016$wt * 1500)/(nrow(df_2016))
 # Create the political sympathy variable in 2016, where numbers for parties are possibly different
 
 df_2016$party<-ifelse(df_2016$vb11 == 913,  'PAIS',
-                 ifelse(df_2016$vb11 == 901, 'CREO', 
+                 ifelse(df_2016$vb11 == 901, 'CREO',
                         ifelse(df_2016$vb11 == 903, 'PSC', 'Others'))) %>% as.factor()
 
 
@@ -150,7 +146,7 @@ df_2016$exc14<-dfc_2016$exc14 %>% as.factor()
 df_2016$exc15<-dfc_2016$exc15 %>% as.factor()
 df_2016$exc16<-dfc_2016$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2016$corr_mun<-ifelse(df_2016$exc11 == 'Yes', 1,
                     ifelse(df_2016$exc11 == 'Not Applicable'| df_2016$exc11 == 'No', 0, NA))
@@ -196,7 +192,7 @@ df_2014$weight1500<- (df_2014$wt * 1500)/(nrow(df_2014))
 # Create the political sympathy variable in 2014, where numbers for parties are possibly different
 
 df_2014$party<-ifelse(df_2014$vb11 == 913,  'PAIS',
-                      ifelse(df_2014$vb11 == 901, 'CREO', 
+                      ifelse(df_2014$vb11 == 901, 'CREO',
                              ifelse(df_2014$vb11 == 903, 'PSC',
                                     ifelse(df_2014$vb11 == 907, 'PK' ,'Others')))) %>% as.factor()
 # Corruption Exposure Variables ------------------------------------------------------------------------------------------
@@ -209,7 +205,7 @@ df_2014$exc14<-dfc_2014$exc14 %>% as.factor()
 df_2014$exc15<-dfc_2014$exc15 %>% as.factor()
 df_2014$exc16<-dfc_2014$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2014$corr_mun<-ifelse(df_2014$exc11 == 'Yes', 1,
                          ifelse(df_2014$exc11 == 'Not Applicable'| df_2014$exc11 == 'No', 0, NA))
@@ -259,7 +255,7 @@ df_2012$weight1500<- (df_2012$wt * 1500)/(nrow(df_2012))
 # Create the political sympathy variable in 2012, where numbers for parties are possibly different
 
 df_2012$party<-ifelse(df_2012$vb11 == 913,  'PAIS',
-                      ifelse(df_2012$vb11 == 904, 'ID', 
+                      ifelse(df_2012$vb11 == 904, 'ID',
                              ifelse(df_2012$vb11 == 903, 'PSC',
                                     ifelse(df_2012$vb11 == 907, 'PK' ,'Others')))) %>% as.factor()
 
@@ -275,7 +271,7 @@ df_2012$exc14<-dfc_2012$exc14 %>% as.factor()
 df_2012$exc15<-dfc_2012$exc15 %>% as.factor()
 df_2012$exc16<-dfc_2012$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2012$corr_mun<-ifelse(df_2012$exc11 == 'Si', 1,
                          ifelse(df_2012$exc11 == 'N/A'| df_2012$exc11 == 'No', 0, NA))
@@ -319,7 +315,7 @@ df_2010$fecha<-NA
 # Create the political sympathy variable in 2010, where numbers for parties are possibly different
 
 df_2010$party<-ifelse(df_2010$vb11 == 913,  'PAIS',
-                      ifelse(df_2010$vb11 == 904, 'ID', 
+                      ifelse(df_2010$vb11 == 904, 'ID',
                              ifelse(df_2010$vb11 == 903, 'PSC',
                                     ifelse(df_2010$vb11 == 907, 'PK' ,'Others')))) %>% as.factor()
 # Weights ----------------------------------------------------------------------------------------------------------------
@@ -338,7 +334,7 @@ df_2010$exc14<-dfc_2010$exc14 %>% as.factor()
 df_2010$exc15<-dfc_2010$exc15 %>% as.factor()
 df_2010$exc16<-dfc_2010$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2010$corr_mun<-ifelse(df_2010$exc11 == 'Sí', 1,
                          ifelse(df_2010$exc11 == 'N/A'| df_2010$exc11 == 'No', 0, NA))
@@ -382,7 +378,7 @@ df_2008$fecha<-NA
 # Create the political sympathy variable in 2008, where numbers for parties are possibly different
 
 df_2008$party<-ifelse(df_2008$vb11 == 913,  'PAIS',
-                      ifelse(df_2008$vb11 == 904, 'ID', 
+                      ifelse(df_2008$vb11 == 904, 'ID',
                              ifelse(df_2008$vb11 == 903, 'PSC',
                                     ifelse(df_2008$vb11 == 907, 'PK' ,'Others')))) %>% as.factor()
 
@@ -402,7 +398,7 @@ df_2008$exc14<-dfc_2008$exc14 %>% as.factor()
 df_2008$exc15<-dfc_2008$exc15 %>% as.factor()
 df_2008$exc16<-dfc_2008$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2008$corr_mun<-ifelse(df_2008$exc11 == 'Sí', 1,
                          ifelse(df_2008$exc11 == 'Not Applicable'| df_2008$exc11 == 'No', 0, NA))
@@ -459,7 +455,7 @@ df_2006$exc14<-dfc_2006$exc14 %>% as.factor()
 df_2006$exc15<-dfc_2006$exc15 %>% as.factor()
 df_2006$exc16<-dfc_2006$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2006$corr_mun<-ifelse(df_2006$exc11 == 'Sí', 1,
                          ifelse(df_2006$exc11 == 'Not Applicable'| df_2006$exc11 == 'No', 0, NA))
@@ -497,7 +493,7 @@ df_2004_ec<-subset(df_all, pais == 9 & year == 2004)
 emptycols<- sapply(df_2004_ec, function (k) all(is.na(k)))
 df_2004_ec<- df_2004_ec[!emptycols]
 
-# Change the id variable so it does not give out a problem 
+# Change the id variable so it does not give out a problem
 
 df_2004_ec$idnum<-NA
 
@@ -511,10 +507,10 @@ df_2004_ec$exc14<-dfc_2004$exc14 %>% as.factor()
 df_2004_ec$exc15<-dfc_2004$exc15 %>% as.factor()
 df_2004_ec$exc16<-dfc_2004$exc16 %>% as.factor()
 
-# Create the corruption variables which make sense for later analysis of the corruption exposure variable 
+# Create the corruption variables which make sense for later analysis of the corruption exposure variable
 
 df_2004_ec$corr_mun<-ifelse(df_2004_ec$exc11 == 'Yes', 1,
-                         ifelse(df_2004_ec$exc11 == 'Not Applicable'| df_2004_ec$exc11 == 'No', 0, NA)) 
+                         ifelse(df_2004_ec$exc11 == 'Not Applicable'| df_2004_ec$exc11 == 'No', 0, NA))
 
 df_2004_ec$corr_work<-ifelse(df_2004_ec$exc13 == 'Yes', 1,
                           ifelse(df_2004_ec$exc13== 'Not Applicable'| df_2004_ec$exc13 == 'No', 0, NA))
@@ -570,7 +566,7 @@ df$gndr_log<-df$q1 == 2
 
 # Age --------------------------------------------------------------------------------------------------------------------
 
-df<-rename(df, 'age'=q2) 
+df<-rename(df, 'age'=q2)
 
 df$age<-as.integer(df$age) # Transform to a number
 
@@ -579,14 +575,14 @@ df$age<-as.integer(df$age) # Transform to a number
 # We change the format of years of schooling
 
 df<-
-  df %>% 
+  df %>%
   mutate(ed = as.numeric(ed))
 
 # ================================================= Sociodemographic ==============================================================
 
 # Urban/Rural ------------------------------------------------------------------------------------------------------------
 
-# Relabel variable 
+# Relabel variable
 
 df$ur<-ifelse(df$ur == 1, 'Urban', 'Rural')
 
@@ -598,7 +594,7 @@ df$ur_log<-df$ur == 'Urban'
 
 # A dummy variable signalling the people who are less than 18 (16 or 17) at the time of the survey
 
-df$new<-ifelse(df$age < 18, 1, 0) 
+df$new<-ifelse(df$age < 18, 1, 0)
 
 # Same but as a factor
 
@@ -612,27 +608,27 @@ df$age_group<-cut(df$age,agegroups)
 
 # Region -----------------------------------------------------------------------------------------------------------------
 
-# Relabel the region variables 
+# Relabel the region variables
 
-df$region<- ifelse(df$estratopri == 901, 'Costa', 
+df$region<- ifelse(df$estratopri == 901, 'Costa',
                     ifelse ( df$estratopri == 902, 'Sierra', 'Oriente'))
 
 # Religion ---------------------------------------------------------------------------------------------------------------
 
-# Relabel the kind of religion 
+# Relabel the kind of religion
 
 df$rlg<-ifelse(df$q3c == 1, 'Catholic',
                ifelse(df$q3c == 2 | df$q3c == 5, 'Christian',
                       ifelse(df$q3c == 3 | df$q3c == 4 | df$q3c == 77, 'Other',
                              ifelse(df$q3c == 6 | df$q3c == 12, 'JW/MOR', 'Atheist'))))
 
-df$cthlic<-ifelse(df$q3c == 1, 1, 0) # Catholic Dummy 
+df$cthlic<-ifelse(df$q3c == 1, 1, 0) # Catholic Dummy
 
 df$christian<-ifelse(df$q3c == 2 | df$q3c == 5, 1, 0) # Christian Dummy
 
-# Relabel the importance of religion, dichotomizing it 
+# Relabel the importance of religion, dichotomizing it
 
-df$rlg_imp<-ifelse(df$q5b < 2, 1, 0) # Very and somewhat important are labelled as 1, little and nothing are 0. 
+df$rlg_imp<-ifelse(df$q5b < 2, 1, 0) # Very and somewhat important are labelled as 1, little and nothing are 0.
 
 # Race -------------------------------------------------------------------------------------------------------------------
 
@@ -702,7 +698,7 @@ df<-rename(df, 'ec_eval'=soct2)
 
 df$ec_eval<-ifelse(df$ec_eval == 3, 'Worse', 'Same or Better') %>% as.factor()
 
-# Relevel so the reference group is same or better 
+# Relevel so the reference group is same or better
 
 df$ec_eval<-relevel(df$ec_eval, 'Same or Better')
 
@@ -718,7 +714,7 @@ df$ec_eval<-relevel(df$ec_eval, 'Same or Better')
 
 df<-rename(df, 'corr_pol'= exc2, 'corr_pub' = exc6)
 
-# All the variables have already been created, so just create the conditional at this point 
+# All the variables have already been created, so just create the conditional at this point
 
 df$corr_exp<-ifelse(df$corr_pol == 1| df$corr_pub == 1| df$corr_mun == 1| df$corr_work == 1| df$corr_court== 1
                     | df$corr_health == 1 | df$corr_school== 1, 1, 0)
@@ -737,7 +733,7 @@ df<-rename(df, 'ctol'= exc18)
 
 # First for 2019, 2014 and all previous years
 
-df$corrper<- ifelse(df$exc7 < 3, 1, 0) # Equals 1 if the person determines a higher corruption perception 
+df$corrper<- ifelse(df$exc7 < 3, 1, 0) # Equals 1 if the person determines a higher corruption perception
 
 # Now for 2016, but create a new variable to not overwrite the other variable
 
@@ -753,7 +749,7 @@ df$corrper_new<-ifelse(df$exc7new >2, 1, 0) # DUmmy variable equaling 1 for all 
 
 # Corruption as the country's most important problem ---------------------------------------------------------------------
 
-df$corprob<-ifelse(df$a4 == 13, 1, 0) # Extract a dummy equaling 1 if the respondent thinks corruption is the most important problem in the country. 
+df$corprob<-ifelse(df$a4 == 13, 1, 0) # Extract a dummy equaling 1 if the respondent thinks corruption is the most important problem in the country.
 
 # ================================================= Labor Market ==============================================================
 
@@ -763,7 +759,7 @@ df$corprob<-ifelse(df$a4 == 13, 1, 0) # Extract a dummy equaling 1 if the respon
 
 df$ocup4a <- as.factor(df$ocup4a)
 
-# Create a variable that signals employment, 1 if employed 
+# Create a variable that signals employment, 1 if employed
 
 df$em_4a<-ifelse(df$ocup4a == 1 | df$ocup4a == 2 ,1,0)
 
@@ -794,7 +790,7 @@ df$eap<-ifelse(df$ocup4a == 1 | df$ocup4a == 2 | df$ocup4a == 3 | df$ocup4a == 7
 
 # Labor Market Sector -------------------------------------------------------------------------------------------------
 
-# Create a new factor, with all 5 groups in them. 
+# Create a new factor, with all 5 groups in them.
 
 df$ocup_sec<-factor(df$ocup1a,
                     levels = c(seq(1:5)),
@@ -804,13 +800,13 @@ df$ocup_sec<-factor(df$ocup1a,
 
 df$self_emp<-ifelse(df$ocup_sec == 'Self-Employed', 1, 0) %>%  as.factor()
 
-# Create a new group/factor variable simply separating private from public. 
+# Create a new group/factor variable simply separating private from public.
 
 df$privpub<-ifelse(df$ocup_sec == 'Public', 'Public', 'Private') %>% as.factor()
 
-# Relevel from public sector. 
+# Relevel from public sector.
 
-df$privpub<-relevel(df$privpub, 'Private') 
+df$privpub<-relevel(df$privpub, 'Private')
 
 # ================================================= Political vars ==============================================================
 
@@ -819,8 +815,8 @@ df$privpub<-relevel(df$privpub, 'Private')
 # Rename the political ideology discrete variable, an make it numeric
 
 df<-
-  df %>% 
-  rename('polscore'=l1) %>% 
+  df %>%
+  rename('polscore'=l1) %>%
   mutate(polscore = as.numeric(polscore))
 
 # The larger the value answered, the more to the right the person is
@@ -835,13 +831,13 @@ df$pol_wing2<-ifelse(df$polscore < 6, 'Left', 'Right')
 
 # Add other classification, with Left, Center and Right (As in the LAPOP report)
 
-# First, I need to add the NA values as a "None" so that the %'s are computed correctly. 
+# First, I need to add the NA values as a "None" so that the %'s are computed correctly.
 
 df$pol_group<-ifelse(is.na(df$polscore), 'None',
-                     ifelse(df$polscore < 4, 'Left', 
+                     ifelse(df$polscore < 4, 'Left',
                             ifelse(df$polscore < 8, 'Center', 'Right')))
 
-# Right and Left according to this grouping, dichotomized 
+# Right and Left according to this grouping, dichotomized
 
 df$leftist<-ifelse(df$pol_group == 'Left', 1, 0)
 
@@ -859,7 +855,7 @@ df$rwing<-ifelse(df$polscore > 6, 1, 0)
 
 df<-rename(df, 'pol_symp'=vb10)
 
-df$pol_symp<-ifelse(df$pol_symp == 1, 'Yes', 'No') 
+df$pol_symp<-ifelse(df$pol_symp == 1, 'Yes', 'No')
 
 # For year 2019, rename the vb11neg variable and apply labels, what party is DISLIKED
 
@@ -876,7 +872,7 @@ df$knowspol<-ifelse(df$eff2> 4, 1, 0)
 # Change the format of the variables eff1 and eff2 so that I can use them in the models and then compute APEs
 
 df<-
-  df %>% 
+  df %>%
   mutate(eff1 = as.numeric(eff1),
          eff2 = as.numeric(eff2))
 
@@ -884,7 +880,7 @@ df<-
 
 # Create an interest in politics factor to difference groups of interest
 
-df$pol_int<-ifelse(df$pol1 == 1, 'A lot', 
+df$pol_int<-ifelse(df$pol1 == 1, 'A lot',
                    ifelse(df$pol1 == 2, 'Some',
                           ifelse(df$pol1 == 3, 'Little', 'None'))) %>% as.factor()
 
@@ -907,7 +903,7 @@ df$prot_log<-df$prot3 == 'Yes'
 # Create a new one
 
 df <-
-  df %>% 
+  df %>%
   mutate(protest = prot3)
 
 # Confidence in President ------------------------------------------------------------------------------------------------
@@ -915,8 +911,8 @@ df <-
 # Rename the variable and make it a numeric variable so it works with the APE model calculation.
 
 df<-
-  df %>% 
-  rename('pres_conf' = b21a) %>% 
+  df %>%
+  rename('pres_conf' = b21a) %>%
   mutate(pres_conf = as.numeric(pres_conf))
 
 # Dichotomize the variable as the LAPOP articles do
@@ -943,7 +939,7 @@ df$pres_aprov_dic<-ifelse(df$pres_aprov > 3, 'Yes', 'No')
 
 # Dataframe Overwriting -------------------------------------------------------------------------------------------------
 
-# Rewrite the dataframes so that all changes are also saved to the dataframes on their own 
+# Rewrite the dataframes so that all changes are also saved to the dataframes on their own
 
 df_2019<-subset(df, year == 2019)
 df_2016<-subset(df, year == 2016)
@@ -953,63 +949,63 @@ df_2010<-subset(df, year == 2010)
 df_2008<-subset(df, year == 2008)
 df_2006<-subset(df, year == 2006)
 df_2004<-subset(df, year == 2004)
+
 df46<-subset(df, year == 2014 | year == 2016)
 
 # Save them as R objects to use them later
 
-save(df_2019,file = 'data/rdata/LAPOP 2019 Manipulated Dataframe.Rdata')
-save(df_2016,file = 'data/rdata/LAPOP 2016 Manipulated Dataframe.Rdata')
-save(df_2014,file = 'data/rdata/LAPOP 2014 Manipulated Dataframe.Rdata')
-save(df_2012,file = 'data/rdata/LAPOP 2012 Manipulated Dataframe.Rdata')
-save(df_2010,file = 'data/rdata/LAPOP 2010 Manipulated Dataframe.Rdata')
-save(df_2008,file = 'data/rdata/LAPOP 2008 Manipulated Dataframe.Rdata')
-save(df_2006,file = 'data/rdata/LAPOP 2006 Manipulated Dataframe.Rdata')
-save(df_2004,file = 'data/rdata/LAPOP 2008 Manipulated Dataframe.Rdata')
-save(df46, file = 'data/rdata/LAPOP 2014-2016 Manipulated Dataframe.Rdata')
-save(df, file = 'data/rdata/LAPOP 2004-2019 Manipulated Dataframe.Rdata')
-
+save(df_2019,file = 'output/rdata/LAPOP 2019 Manipulated Dataframe.Rdata')
+save(df_2016,file = 'output//rdata/LAPOP 2016 Manipulated Dataframe.Rdata')
+save(df_2014,file = 'output/rdata/LAPOP 2014 Manipulated Dataframe.Rdata')
+save(df_2012,file = 'output/rdata/LAPOP 2012 Manipulated Dataframe.Rdata')
+save(df_2010,file = 'output/rdata/LAPOP 2010 Manipulated Dataframe.Rdata')
+save(df_2008,file = 'output/rdata/LAPOP 2008 Manipulated Dataframe.Rdata')
+save(df_2006,file = 'output/rdata/LAPOP 2006 Manipulated Dataframe.Rdata')
+save(df_2004,file = 'output/rdata/LAPOP 2008 Manipulated Dataframe.Rdata')
+save(df46, file = 'output/rdata/LAPOP 2014-2016 Manipulated Dataframe.Rdata')
+save(df, file = 'output/rdata/LAPOP 2004-2019 Manipulated Dataframe.Rdata')
 
 # Delete everything but what is needed ------------------------------------------------------------------------------------------------------
 
 # Here I will remove all the unnecessary objects from my workspace
 
-rm(list = setdiff(ls(), 
+rm(list = setdiff(ls(),
                   c('df', 'df_2014', 'df_2016', 'df46')))
 
 # Survey design objects --------------------------------------------------------------------------------------------------
 
 # Full 2004-2019 design
 
-lapop_des<-svydesign(ids = ~ upm, 
-                     strata = ~ estratopri, 
-                     weights = ~ weight1500, 
+lapop_des<-svydesign(ids = ~ upm,
+                     strata = ~ estratopri,
+                     weights = ~ weight1500,
                      nest = TRUE,
                      na.action = 'na.exclude',
                      data = df)
 
 # 2014-2016 Survey Design
 
-lapop_des46<-svydesign(ids = ~ upm, 
-                       strata = ~ estratopri, 
-                       weights = ~ weight1500, 
+lapop_des46<-svydesign(ids = ~ upm,
+                       strata = ~ estratopri,
+                       weights = ~ weight1500,
                        nest = TRUE,
                        na.action = 'na.exclude',
                        data = df46)
 
 # 2016 free dataset
 
-lapop_des16<-svydesign(ids = ~ upm, 
-                       strata = ~ estratopri, 
-                       weights = ~ weight1500, 
+lapop_des16<-svydesign(ids = ~ upm,
+                       strata = ~ estratopri,
+                       weights = ~ weight1500,
                        nest = TRUE,
                        na.action = 'na.exclude',
                        data = df_2016)
 
 # 2014 free dataset
 
-lapop_des14<-svydesign(ids = ~ upm, 
-                       strata = ~ estratopri, 
-                       weights = ~ weight1500, 
+lapop_des14<-svydesign(ids = ~ upm,
+                       strata = ~ estratopri,
+                       weights = ~ weight1500,
                        nest = TRUE,
                        na.action = 'na.exclude',
                        data = df_2014)
