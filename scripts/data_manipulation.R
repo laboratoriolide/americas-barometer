@@ -965,6 +965,10 @@ save(df_2004,file = 'output/rdata/LAPOP 2008 Manipulated Dataframe.Rdata')
 save(df46, file = 'output/rdata/LAPOP 2014-2016 Manipulated Dataframe.Rdata')
 save(df, file = 'output/rdata/LAPOP 2004-2019 Manipulated Dataframe.Rdata')
 
+# Write to csv
+
+write.csv(df, file = 'output/csv/ab_04_09.csv' )
+
 # Delete everything but what is needed ------------------------------------------------------------------------------------------------------
 
 # Here I will remove all the unnecessary objects from my workspace
